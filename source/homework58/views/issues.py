@@ -44,10 +44,12 @@ class IssueCreateView(TemplateView):
         form = IssueForm(request.POST)
         if form.is_valid():
             issue = form.save()
-            for type in request.POST.get('type'):
-                issue.type.add(type)
-            issue.save()
-            return redirect('index')
+            if request.POST.get('type'):
+                for type in request.POST.get('type'):
+                    issue.type.add(type)
+            else:
+                issue.save()
+                return redirect('index')
         else:
             return render(request, 'issue_create.html', context={'form': form})
 
