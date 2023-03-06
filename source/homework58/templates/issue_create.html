@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}
+Create Issue
+{% endblock %}
+{% block content %}
+<div class="form_div">
+    <form action="{% url 'issue_create' %}" method="post">
+        {% include 'partial/issue_form.html' with button_text='Create' %}
+    </form>
+</div>
+{% endblock %}
