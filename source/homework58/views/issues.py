@@ -45,8 +45,10 @@ class IssueCreateView(TemplateView):
         if form.is_valid():
             issue = form.save()
             if request.POST.get('type'):
-                for type in request.POST.get('type'):
-                    issue.type.add(type)
+                for i in request.POST.get('type'):
+                    issue.type.add(i)
+                    issue.save()
+                    return redirect('index')
             else:
                 issue.save()
                 return redirect('index')

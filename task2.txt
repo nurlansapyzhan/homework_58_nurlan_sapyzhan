@@ -1,0 +1,43 @@
+1.Закрытые задачи за последний месяц от текущей даты
+
+from datetime import datetime, timedelta
+from homework58.models import Issue, Status
+
+one_month_ago = datetime.now() - timedelta(days=30)
+closed_issues = Issue.objects.filter(status__name='Done', updated_date__gte=one_month_ago)
+
+for issue in closed_issues:
+    print(issue.summary)
+
+
+2. Задачи, имеющие один из указанных статусов И один из указанных типов
+
+from homework58.models import Issue, Status, Type
+
+issues = Issue.objects.filter(status__name__in=['New', 'Done'], type__name__in=['Task', 'Bug'])
+
+for issue in issues:
+    print(issue.summary)
+
+
+3. Задачи, в названии которых содержится слово "bug" в любом регистре или относящиеся к типу "Баг",
+имеющие НЕ закрытый статус
+
+from homework58.models import Issue, Status, Type
+from django.db.models import Q
+
+issues = Issue.objects.filter(~Q(status__name='Done'), Q(type__name='Bug') | Q(summary__icontains='bug'))
+
+for issue in issues:
+    print(issue.summary)
+
+
+БОНУС
+1. Для всех задач только следующие поля: id, название задачи, название типа и название статуса
+
+from homework58.models import Issue
+
+issues = Issue.objects.all().values('id', 'summary', 'type__name', 'status__name')
+
+for issue in issues:
+    print(issue)
